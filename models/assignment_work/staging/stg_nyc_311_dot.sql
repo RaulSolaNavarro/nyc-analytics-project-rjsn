@@ -70,7 +70,7 @@ cleaned AS (
    WHERE (agency = 'DOT' OR agency_name LIKE '%Transportation%')
    AND unique_key IS NOT NULL
    AND created_date IS NOT NULL
-   AND CAST(created_date AS DATE) >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 YEAR)
+   AND SAFE_CAST(REPLACE(created_date, '.000', '') AS TIMESTAMP) >= TIMESTAMP(DATE_SUB(CURRENT_DATE(), INTERVAL 7 YEAR))
    AND borough IS NOT NULL
 
    QUALIFY ROW_NUMBER() OVER (PARTITION BY unique_key ORDER BY created_date DESC) = 1
