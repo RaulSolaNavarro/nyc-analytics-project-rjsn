@@ -38,3 +38,22 @@ models:
 
        dot_311:
          +materialized: table
+
+# Setup for the group project
+   group_3_project:
+     staging:
+       +materialized: table
+       +schema: group_3_staging
+
+     marts:
+       +materialized: table
+       +schema: group_3_marts
+
+       dim_311:
+         +materialized: table
+
+       dim_share:
+         +materialized: table
+
+       dim_traffic:
+         +materialized: table
