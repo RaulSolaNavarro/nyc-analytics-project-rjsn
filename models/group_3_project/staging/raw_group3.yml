@@ -1,0 +1,8 @@
+version: 2
+sources:
+  - name: traffic_raw_source
+    database: raul-cis-9440-spring2026
+    schema: group_3_raw_data
+    tables:
+      - name: group_3_source_traffic_volume_history
+      - name: group_3_source_dot_311_requests_history
