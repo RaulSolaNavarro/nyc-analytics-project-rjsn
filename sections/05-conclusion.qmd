@@ -1,0 +1,126 @@
+---
+title: "Conclusion & Results"
+---
+
+## Summary of Findings
+
+This project set out to answer two core analytics questions about NYC road
+infrastructure using a data warehouse integrating 311 service requests and DOT
+automated traffic volume counts from 2020 to 2025.
+
+### Q1: Does traffic volume correlate with complaint frequency?
+
+The data reveals a **nuanced, non-linear relationship** between traffic volume
+and complaint frequency at the borough level. Manhattan carries the highest
+average daily traffic volume (~28,000 vehicles/day at sensor locations) yet ranks
+third in total complaints. Queens generates the most complaints despite having
+lower sensor-measured traffic than Manhattan or the Bronx.
+
+This suggests that **raw traffic volume is an incomplete predictor** of complaint
+frequency. Other factors including road age, lane miles, residential density, and reporting
+behavior, likely contribute. The `complaints_per_million_vehicles` metric
+(Query 5) provides a more normalized view: Staten Island, despite lower absolute
+traffic, shows a disproportionately high complaint rate relative to measured volume,
+pointing to either older road infrastructure or denser residential reporting.
+
+The **T2R metric** (Query 8) and **Peak-Load Service Lag KPI** (Query 9) add further
+nuance: response times during peak traffic months (11.99 days avg) are actually
+*slightly faster* than during non-peak months (12.90 days). The T2R borough
+comparison shows no consistent pattern between traffic volume and repair speed,
+suggesting that factors other than traffic load, such as staffing levels, borough
+geography, or complaint type mix, are the primary drivers of response time variation.
+
+### Q2, Does response time vary across boroughs?
+
+Yes, substantially. Brooklyn takes an average of **14 days** to close a street
+complaint; Staten Island closes in just **7 days**. This gap is notable given that
+Staten Island has the highest-complaint ZIP codes by absolute count (10306 at 48,704).
+
+The Bronx result is worth highlighting: it ranks 2nd in average daily traffic but
+4th in response time (10 days), suggesting that traffic volume does not automatically
+create a maintenance lag in all boroughs. Whether this reflects staffing differences,
+complaint types, or geographic compactness requires further investigation.
+
+---
+
+## Recommendations for Stakeholders
+
+**For the NYC Department of Transportation:**
+
+- Investigate why Brooklyn consistently lags in response time despite being one of
+  the most-complained boroughs. A borough-level staffing or routing analysis could
+  identify whether this is a resource or workflow issue.
+- Consider prioritizing preventive maintenance in Staten Island ZIP codes 10306 and
+  10314, which show very high complaint volumes relative to their size and traffic load.
+- The spring complaint spike observed across all years suggests seasonal readiness
+  planning (winter pothole season → spring complaint wave) could reduce peak lag time.
+
+**For Logistics & Delivery Companies:**
+
+- Queens ZIP codes 11385, 11101, and 11377 represent high complaint density along
+  likely delivery corridors. Route planning tools that incorporate 311 complaint
+  hotspot data could reduce vehicle maintenance costs and delays.
+
+**For Urban Planners:**
+
+- The disconnect between traffic sensor coverage and complaint geography highlights
+  a data gap: traffic sensors are concentrated in certain corridors, while complaints
+  span the full residential street network. Expanding sensor coverage to residential
+  ZIP codes with high complaint rates would enable more precise infrastructure planning.
+
+---
+
+## Limitations & Data Challenges
+
+::: {.callout-warning}
+**Geographic join resolution**  
+The 311 data geolocates complaints to ZIP codes, while the traffic data geolocates
+sensors to road segments with WKT geometries. Cross-mart joins are therefore only
+possible at the **borough level**, not at the street or ZIP level. A more granular
+spatial join (e.g., snapping complaints to the nearest sensor segment) was out of
+scope for this project but would substantially strengthen the analysis.
+:::
+
+::: {.callout-warning}
+**Traffic sensor coverage is not uniform**  
+The DOT traffic count dataset covers a subset of road segments, not the full
+street network. Sensors are more densely placed on arterial and commercial roads.
+This means that residential streetsm, which generate many of the complaints in
+suburban ZIP codes, may be systematically under-counted in the traffic data.
+:::
+
+::: {.callout-note}
+**Traffic counts do not cover the full year**  
+The DOT records traffic at specific segments for specific periods; not all segments
+are counted every day. The average daily traffic volume figures used in this analysis
+are averages over counted days only, which may introduce bias toward busier periods.
+:::
+
+::: {.callout-note}
+**311 reporting behavior varies by community**  
+Complaint counts reflect both actual infrastructure conditions *and* the willingness
+of residents to file 311 reports. Areas with higher civic engagement may show more
+complaints not because their roads are worse, but because residents are more likely
+to report issues.
+:::
+
+---
+
+## Recommended Follow-Up Analysis
+
+1. **Street-segment level spatial join**: Use PostGIS or BigQuery GIS functions to
+   snap 311 complaints to their nearest DOT sensor segment, enabling correlation
+   analysis at a finer geographic grain.
+
+2. **Complaint type decomposition**: Analyze whether *Street Condition* (potholes)
+   complaints specifically track differently from *Street Light Condition* complaints
+   relative to traffic volume, since potholes are more directly caused by vehicle load.
+
+3. **Year-over-year response time trend**: Query 2 produces a static borough average.
+   Adding a year dimension would show whether response times are improving or degrading
+   over the 2020–2025 window.
+
+4. **Heavy vehicle sub-analysis**: The original proposal targeted heavy vehicle counts
+   (trucks) specifically. The DOT dataset includes vehicle class data that was not fully
+   leveraged here; a filtered analysis on heavy vehicles vs. potholes specifically would
+   better test the infrastructure-degradation hypothesis.

@@ -1,0 +1,168 @@
+/* ============================================================
+   NYC Traffic & Road Infrastructure Analysis – Custom Styles
+   CIS 9440 Group 3 | Baruch College
+   ============================================================ */
+
+/* --- Google Fonts (loaded via @import in HTML head) --------- */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* --- Base typography ---------------------------------------- */
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'DM Serif Display', serif;
+  letter-spacing: -0.02em;
+}
+
+/* --- Cover / hero banner ------------------------------------ */
+.project-hero {
+  background: linear-gradient(135deg, #1a3a5c 0%, #2e6da4 60%, #4a9ede 100%);
+  color: #fff;
+  padding: 3.5rem 2.5rem 3rem;
+  border-radius: 10px;
+  margin-bottom: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
+.project-hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 0.4rem;
+  color: #fff;
+  border: none;
+  position: relative;
+}
+
+.project-hero .subtitle {
+  font-size: 1.05rem;
+  opacity: 0.85;
+  position: relative;
+}
+
+.project-hero .meta-tags {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.tag {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 0.2rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
+/* --- KPI / callout cards ------------------------------------ */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.kpi-card {
+  background: #f0f6ff;
+  border-left: 4px solid #2e6da4;
+  padding: 1rem 1.2rem;
+  border-radius: 6px;
+}
+
+.kpi-card .kpi-value {
+  font-size: 2rem;
+  font-family: 'DM Serif Display', serif;
+  color: #1a3a5c;
+  line-height: 1.1;
+}
+
+.kpi-card .kpi-label {
+  font-size: 0.78rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.2rem;
+}
+
+/* --- Section dividers --------------------------------------- */
+.section-rule {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2.5rem 0;
+}
+
+/* --- Code blocks -------------------------------------------- */
+pre, code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+}
+
+/* --- Embedded iframe (Looker Studio / dbdiagram) ------------ */
+.embed-container {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+  margin: 1.5rem 0;
+}
+
+.embed-container iframe {
+  width: 100%;
+  border: none;
+  display: block;
+}
+
+/* --- Image captions ----------------------------------------- */
+figure figcaption {
+  font-size: 0.82rem;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+/* --- Quarto callout overrides ------------------------------- */
+.callout {
+  border-radius: 6px;
+}
+
+/* --- Navbar tweak ------------------------------------------- */
+.navbar-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem !important;
+}
+
+/* --- Dark mode adjustments ---------------------------------- */
+[data-bs-theme="dark"] .kpi-card {
+  background: #1e2d40;
+  border-left-color: #4a9ede;
+}
+
+[data-bs-theme="dark"] .kpi-card .kpi-value {
+  color: #90c8f0;
+}
+
+[data-bs-theme="dark"] .kpi-card .kpi-label {
+  color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .project-hero {
+  background: linear-gradient(135deg, #0d1f30 0%, #1a3a5c 60%, #2e6da4 100%);
+}

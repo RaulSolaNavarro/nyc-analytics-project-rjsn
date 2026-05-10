@@ -1,0 +1,125 @@
+---
+title: "NYC Traffic & Road Infrastructure Analysis"
+subtitle: "CIS 9440 - Data Warehousing & Analytics | Group 3"
+---
+
+```{=html}
+<div class="project-hero">
+  <h1>NYC Traffic &amp; Road Infrastructure Analysis</h1>
+  <p class="subtitle">
+    Investigating the relationship between traffic density and road infrastructure
+    degradation across New York City's five boroughs (2020-2025).
+  </p>
+  <div class="meta-tags">
+    <span class="tag">CIS 9440 · Data Warehousing</span>
+    <span class="tag">Baruch College · Zicklin School of Business</span>
+    <span class="tag">Spring 2026</span>
+    <span class="tag">Group 3</span>
+  </div>
+</div>
+```
+
+## Introduction
+
+New York City's road infrastructure handles some of the highest traffic volumes in
+the United States. When roads degrade, potholes form, traffic signals fail, street
+lights go dark, and the burden falls on residents, delivery networks, and emergency
+services alike. Yet maintenance resources are finite, and response times vary widely
+across boroughs.
+
+This project builds a **data warehouse** that integrates two NYC Open Data sources
+to investigate whether traffic volume is a meaningful predictor of infrastructure
+complaints, and whether boroughs with higher traffic also experience slower repair
+response times.
+
+### Analytics Questions
+
+> **Q1: Does traffic volume correlate with complaint frequency?**  
+> To what extent does high traffic volume (specifically heavy vehicle counts)
+> correlate with the frequency of "Street Condition," "Street Light Condition,"
+> and related 311 complaints?
+
+> **Q2: Does response time vary across boroughs?**  
+> How does agency response time for road repairs vary between high-traffic zones
+> and low-traffic zones? Is there a measurable "maintenance lag" in high-traffic areas?
+
+### Key Metrics / KPIs
+
+| KPI | Description |
+|-----|-------------|
+| **Pothole Incidence Rate (PIR)** | Total "Street Condition" complaints ÷ avg daily traffic volume per segment |
+| **Traffic-to-Repair Correlation (T2R)** | Statistical measure across zip codes: Do higher traffic volumes correlate with faster or slower resolution? |
+| **Peak-Load Service Lag** | Avg days-to-close during peak traffic months vs. annual average |
+
+### Data Sources
+
+| Source | Description | Link |
+|--------|-------------|------|
+| **NYC 311 Service Requests** | Community-reported road/infrastructure issues, filtered to street-related complaint types, 2020-2025 | [NYC Open Data](https://data.cityofnewyork.us/Social-Services/NYC-311-Data/jrb2-thup/about_data) |
+| **DOT Automatic Traffic Volume Counts** | 15-minute interval automated traffic counts at DOT sensor locations, 2020-2025 | [NYC Open Data](https://data.cityofnewyork.us/Transportation/Automated-Traffic-Volume-Counts/7ym2-waep) |
+
+### Potential Stakeholders
+
+- **NYC Department of Transportation (DOT)**: prioritize preventive maintenance on
+  high-traffic / low-complaint roads before failure occurs.
+- **Logistics & Delivery Companies**: identify high-incident routes that increase
+  vehicle maintenance costs or delivery delays.
+- **Urban Planners**: assess whether current road materials are sufficient for the
+  actual traffic load detected by sensors.
+
+---
+
+## Project Summary
+
+```{=html}
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value">944,395</div>
+    <div class="kpi-label">Total street complaints</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">11 days</div>
+    <div class="kpi-label">Avg citywide close time</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">5</div>
+    <div class="kpi-label">Boroughs analyzed</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">2020-2025</div>
+    <div class="kpi-label">Data time range</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">250+</div>
+    <div class="kpi-label">ZIP codes covered</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">9 SQL</div>
+    <div class="kpi-label">Analytical queries</div>
+  </div>
+</div>
+```
+
+### Group Members
+
+| Name | Role | GitHub |
+|------|------|--------|
+| Zesen Chen | *Technician* | [See Portfolio](https://github.com/ZesenS) |
+| Bridgette Wang | *Detail Manager* | [See Portfolio](https://github.com/wqiaop-glitch) |
+| Paven Oommen | *Communicator* | [See Portfolio](https://github.com/PAVEN227) |
+| Sung Ik Park | *Technician* | [See Portfolio](https://github.com/RaulSolaNavarro) |
+| Raúl J. Solá Navarro | *Facilitator* | [See Portfolio](https://github.com/RaulSolaNavarro) |
+
+### Navigation
+
+Use the navbar above to move through each section of the report:
+
+- **[Data Model](sections/02-dimensional-model.qmd)**: Kimball star-schema dimensional
+  model for both data marts
+- **[ELT Pipeline](sections/03-elt-pipeline.qmd)**: Extraction, loading, and
+  transformation using BigQuery, Socrata API, and dbt
+- **[Analysis](sections/04-analysis.qmd)**: SQL queries, BigQuery results, and the
+  Looker Studio dashboard
+- **[Conclusion](sections/05-conclusion.qmd)**: Findings, recommendations, and
+  limitations
+- **[References](sections/06-references.qmd)**: Data sources, tools, and citations

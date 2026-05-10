@@ -1,0 +1,25 @@
+# R
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user/
+
+# Quarto intermediates
+/.quarto/
+*_files/
+*_cache/
+
+# Keep /docs (GitHub Pages output) — do NOT gitignore docs/
+# docs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Credentials — never commit these
+.env
+secrets.yaml
+profiles.yml
+service-account*.json
+
+**/*.quarto_ipynb

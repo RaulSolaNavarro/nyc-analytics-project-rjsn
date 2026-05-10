@@ -1,0 +1,104 @@
+---
+title: "References"
+---
+
+## Data Sources
+
+**NYC 311 Service Requests**  
+NYC Open Data. *311 Service Requests from 2010 to Present.*  
+URL: <https://data.cityofnewyork.us/Social-Services/NYC-311-Data/jrb2-thup/about_data>  
+Curator: NYC Department of Information Technology and Telecommunications (DoITT)  
+Accessed: *(Spring/2026)*
+
+**DOT Automated Traffic Volume Counts**  
+NYC Open Data. *Automated Traffic Volume Counts.*  
+URL: <https://data.cityofnewyork.us/Transportation/Automated-Traffic-Volume-Counts/7ym2-waep>  
+Curator: NYC Department of Transportation (DOT)  
+Accessed: *(Spring/2026)*
+
+---
+
+## Tools & Software
+
+**Google BigQuery**  
+Google LLC. *BigQuery: Cloud Data Warehouse.*  
+URL: <https://cloud.google.com/bigquery>
+
+**dbt (data build tool)**  
+dbt Labs. *dbt Core: open-source data transformation tool.*  
+URL: <https://www.getdbt.com>  
+Version: *(add version used)*
+
+**Google Data Studio (formerly Looker Studio)**  
+Google LLC. *Data Studio: free data visualization and BI tool.*  
+URL: <https://datastudio.google.com>
+
+**Socrata Open Data API**  
+Tyler Technologies. *Socrata API documentation.*  
+URL: <https://dev.socrata.com>
+
+**dbdiagram.io**  
+Holistics Software. *dbdiagram.io: Database Relationship Diagram Tool.*  
+URL: <https://dbdiagram.io>
+
+**Quarto**  
+Posit, PBC. *Quarto: An Open-Source Scientific and Technical Publishing System.*  
+URL: <https://quarto.org>  
+Version: *(add version used)*
+
+**R / RStudio**  
+R Core Team. *R: A Language and Environment for Statistical Computing.*  
+URL: <https://www.r-project.org>  
+Posit, PBC. *RStudio Desktop.*  
+URL: <https://posit.co/products/open-source/rstudio/>
+
+**Google Cloud Functions**  
+Google LLC. *Cloud Functions: Serverless compute platform.*  
+URL: <https://cloud.google.com/functions>
+
+---
+
+## Project Repository & Warehouse Links
+
+**GitHub Repository**  
+URL: <https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn>
+
+**BigQuery Project**  
+Project: `raul-cis-9440-spring2026`  
+Datasets: `group_3_raw`, `group_3_staging`, `group_3_marts`  
+Access shared with: `jaclyn.cohen@baruch.cuny.edu`
+
+**Data Studio Dashboard**  
+URL: *(https://datastudio.google.com/reporting/b7835c43-9acb-4aa1-9cd6-e9230b5421d8)*  
+Access shared with: `jaclyn.cohen@baruch.cuny.edu`
+
+---
+
+## Course Reference
+
+Cohen, J. *CIS 9440: Data Warehousing and Analytics.*  
+Baruch College, Zicklin School of Business. Spring 2026.
+
+---
+
+::: {.callout-note collapse="true"}
+#### AI Tool Usage Disclosure
+
+Portions of this project's technical implementation and documentation were developed with assistance from Claude (Anthropic), an AI assistant. Specifically, AI assistance was used for:
+
+- **Project report structure & documentation**: Scaffolding the Quarto website layout, section organization, and markdown formatting across all `.qmd` files
+- **SQL queries**: Initial drafts and structural patterns for several BigQuery analytical queries (Queries 1–9); all queries were reviewed, tested, and validated against actual data by the team
+- **dbt model structure**: Guidance on staging and mart layer organization, macro usage, and DAG structure
+- **BigQuery / GCP configuration**: Assistance with dataset organization, table creation syntax, and Cloud Function architecture patterns
+- **Data Studio**: Guidance on chart configuration, cross-source joins, and dashboard layout decisions
+- **GitHub / version control**: Assistance with repository structure, `.gitignore` configuration, and Quarto-to-GitHub Pages publishing setup
+
+The following work was completed entirely by the team without AI assistance:
+
+- All written analysis, findings, and narrative conclusions
+- Dimensional model design and all dbdiagram.io ERD work
+- Data source selection, exploration, and project proposal
+- All stakeholder framing and KPI definitions
+
+*AI-generated content was reviewed and validated by all group members prior to submission. Use of AI tools is disclosed in accordance with course academic honesty policies.*
+:::

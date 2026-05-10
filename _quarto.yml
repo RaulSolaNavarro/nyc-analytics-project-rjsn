@@ -1,0 +1,51 @@
+project:
+  type: website
+  output-dir: docs          # GitHub Pages serves from /docs by default
+
+website:
+  title: "NYC Traffic & Road Infrastructure Analysis"
+  description: "CIS 9440 - Data Warehousing & Analytics | Group 3 | Baruch College"
+  favicon: images/favicon.png   # optional – add one if you have it
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: sections/02-dimensional-model.qmd
+        text: Data Model
+      - href: sections/03-elt-pipeline.qmd
+        text: ELT Pipeline
+      - href: sections/04-analysis.qmd
+        text: Analysis
+      - href: sections/05-conclusion.qmd
+        text: Conclusion
+      - href: sections/06-references.qmd
+        text: References
+    right:
+      - icon: github
+        href: https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn
+        aria-label: GitHub
+
+  page-footer:
+    left: "CIS 9440 - Data Warehousing | Baruch College | Zicklin School of Business"
+    right: "Group 3: Zesen Chen · Bridgette Wang · Paven Oommen · Sung Ik Park · Raúl J. Solá Navarro"
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    highlight-style: github
+    code-fold: true           # SQL blocks collapsed by default – click to expand
+    code-tools: true
+    toc: true
+    toc-depth: 3
+    number-sections: false
+    smooth-scroll: true
+    css: styles.css
+    df-print: paged
+
+execute:
+  echo: true
+  warning: false
+  message: false
+  eval: false                 # Set to true only if you wire up a live BQ connection
