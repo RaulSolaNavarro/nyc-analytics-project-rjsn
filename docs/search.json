@@ -151,21 +151,21 @@
     "href": "sections/03-elt-pipeline.html",
     "title": "ELT Pipeline",
     "section": "",
-    "text": "The pipeline follows a standard modern data stack pattern:\nNYC Open Data (Socrata API)\n        │\n        ▼\n  Cloud Function (Python)          ← Extract & Load\n        │\n        ▼\n  BigQuery – raw dataset           ← Raw tables (source-faithful)\n        │\n        ▼\n  dbt – staging models             ← Type casting, renaming, light cleaning\n        │\n        ▼\n  dbt – mart models                ← Star schema (facts + dimensions)\n        │\n        ▼\n  BigQuery – group_3_marts         ← Final warehouse\n        │\n        ▼\n  Looker Studio (Data Studio)      ← Visualization & dashboards"
+    "text": "The pipeline follows a standard modern data stack pattern:\nNYC Open Data (Socrata API)\n        │\n        ▼\n  Cloud Function (Python)          ← Extract & Load\n        │\n        ▼\n  BigQuery - raw dataset           ← Raw tables (source-faithful)\n        │\n        ▼\n  dbt - staging models             ← Type casting, renaming, light cleaning\n        │\n        ▼\n  dbt - mart models                ← Star schema (facts + dimensions)\n        │\n        ▼\n  BigQuery - group_3_marts         ← Final warehouse\n        │\n        ▼\n  Data Studio (Looker Studio)      ← Visualization & dashboards"
   },
   {
     "objectID": "sections/03-elt-pipeline.html#architecture-overview",
     "href": "sections/03-elt-pipeline.html#architecture-overview",
     "title": "ELT Pipeline",
     "section": "",
-    "text": "The pipeline follows a standard modern data stack pattern:\nNYC Open Data (Socrata API)\n        │\n        ▼\n  Cloud Function (Python)          ← Extract & Load\n        │\n        ▼\n  BigQuery – raw dataset           ← Raw tables (source-faithful)\n        │\n        ▼\n  dbt – staging models             ← Type casting, renaming, light cleaning\n        │\n        ▼\n  dbt – mart models                ← Star schema (facts + dimensions)\n        │\n        ▼\n  BigQuery – group_3_marts         ← Final warehouse\n        │\n        ▼\n  Looker Studio (Data Studio)      ← Visualization & dashboards"
+    "text": "The pipeline follows a standard modern data stack pattern:\nNYC Open Data (Socrata API)\n        │\n        ▼\n  Cloud Function (Python)          ← Extract & Load\n        │\n        ▼\n  BigQuery - raw dataset           ← Raw tables (source-faithful)\n        │\n        ▼\n  dbt - staging models             ← Type casting, renaming, light cleaning\n        │\n        ▼\n  dbt - mart models                ← Star schema (facts + dimensions)\n        │\n        ▼\n  BigQuery - group_3_marts         ← Final warehouse\n        │\n        ▼\n  Data Studio (Looker Studio)      ← Visualization & dashboards"
   },
   {
     "objectID": "sections/03-elt-pipeline.html#tools-used",
     "href": "sections/03-elt-pipeline.html#tools-used",
     "title": "ELT Pipeline",
     "section": "Tools Used",
-    "text": "Tools Used\n\n\n\n\n\n\n\nTool\nPurpose\n\n\n\n\nSocrata Open Data API\nExtracted both source datasets from NYC Open Data\n\n\nGoogle Cloud Functions (Python)\nServerless extract-and-load scripts that wrote raw data to BigQuery\n\n\nGoogle BigQuery\nCloud data warehouse → hosts raw, staging, and mart datasets\n\n\ndbt (data build tool)\nSQL-based transformation framework; manages staging → mart models with lineage tracking\n\n\nGitHub\nVersion control for all dbt models, macros, and project config\n\n\nLooker Studio (Data Studio)\nBI dashboarding and visualization layer"
+    "text": "Tools Used\n\n\n\n\n\n\n\nTool\nPurpose\n\n\n\n\nSocrata Open Data API\nExtracted both source datasets from NYC Open Data\n\n\nGoogle Cloud Functions (Python)\nServer-less extract-and-load scripts that wrote raw data to BigQuery\n\n\nGoogle BigQuery\nCloud data warehouse → hosts raw, staging, and mart datasets\n\n\ndbt (data build tool)\nSQL-based transformation framework; manages staging → mart models with lineage tracking\n\n\nGitHub\nVersion control for all dbt models, macros, and project config\n\n\nData Studio (Looker Studio)\nBI dashboarding and visualization layer"
   },
   {
     "objectID": "sections/03-elt-pipeline.html#extract-load",

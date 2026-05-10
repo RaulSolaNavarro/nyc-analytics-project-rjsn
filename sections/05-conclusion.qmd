@@ -30,7 +30,7 @@ comparison shows no consistent pattern between traffic volume and repair speed,
 suggesting that factors other than traffic load, such as staffing levels, borough
 geography, or complaint type mix, are the primary drivers of response time variation.
 
-### Q2, Does response time vary across boroughs?
+### Q2: Does response time vary across boroughs?
 
 Yes, substantially. Brooklyn takes an average of **14 days** to close a street
 complaint; Staten Island closes in just **7 days**. This gap is notable given that

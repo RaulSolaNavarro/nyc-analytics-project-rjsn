@@ -13,19 +13,19 @@ NYC Open Data (Socrata API)
   Cloud Function (Python)          ← Extract & Load
         │
         ▼
-  BigQuery – raw dataset           ← Raw tables (source-faithful)
+  BigQuery - raw dataset           ← Raw tables (source-faithful)
         │
         ▼
-  dbt – staging models             ← Type casting, renaming, light cleaning
+  dbt - staging models             ← Type casting, renaming, light cleaning
         │
         ▼
-  dbt – mart models                ← Star schema (facts + dimensions)
+  dbt - mart models                ← Star schema (facts + dimensions)
         │
         ▼
-  BigQuery – group_3_marts         ← Final warehouse
+  BigQuery - group_3_marts         ← Final warehouse
         │
         ▼
-  Looker Studio (Data Studio)      ← Visualization & dashboards
+  Data Studio (Looker Studio)      ← Visualization & dashboards
 ```
 
 ---
@@ -35,11 +35,11 @@ NYC Open Data (Socrata API)
 | Tool | Purpose |
 |------|---------|
 | **Socrata Open Data API** | Extracted both source datasets from NYC Open Data |
-| **Google Cloud Functions (Python)** | Serverless extract-and-load scripts that wrote raw data to BigQuery |
+| **Google Cloud Functions (Python)** | Server-less extract-and-load scripts that wrote raw data to BigQuery |
 | **Google BigQuery** | Cloud data warehouse → hosts raw, staging, and mart datasets |
 | **dbt (data build tool)** | SQL-based transformation framework; manages staging → mart models with lineage tracking |
 | **GitHub** | Version control for all dbt models, macros, and project config |
-| **Looker Studio (Data Studio)** | BI dashboarding and visualization layer |
+| **Data Studio (Looker Studio)** | BI dashboarding and visualization layer |
 
 ---
 

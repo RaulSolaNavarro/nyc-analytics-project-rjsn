@@ -392,19 +392,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   Cloud Function (Python)          ← Extract &amp; Load
         │
         ▼
-  BigQuery – raw dataset           ← Raw tables (source-faithful)
+  BigQuery - raw dataset           ← Raw tables (source-faithful)
         │
         ▼
-  dbt – staging models             ← Type casting, renaming, light cleaning
+  dbt - staging models             ← Type casting, renaming, light cleaning
         │
         ▼
-  dbt – mart models                ← Star schema (facts + dimensions)
+  dbt - mart models                ← Star schema (facts + dimensions)
         │
         ▼
-  BigQuery – group_3_marts         ← Final warehouse
+  BigQuery - group_3_marts         ← Final warehouse
         │
         ▼
-  Looker Studio (Data Studio)      ← Visualization &amp; dashboards</code></pre>
+  Data Studio (Looker Studio)      ← Visualization &amp; dashboards</code></pre>
 <hr>
 </section>
 <section id="tools-used" class="level2">
@@ -427,7 +427,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td><strong>Google Cloud Functions (Python)</strong></td>
-<td>Serverless extract-and-load scripts that wrote raw data to BigQuery</td>
+<td>Server-less extract-and-load scripts that wrote raw data to BigQuery</td>
 </tr>
 <tr class="odd">
 <td><strong>Google BigQuery</strong></td>
@@ -442,7 +442,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Version control for all dbt models, macros, and project config</td>
 </tr>
 <tr class="even">
-<td><strong>Looker Studio (Data Studio)</strong></td>
+<td><strong>Data Studio (Looker Studio)</strong></td>
 <td>BI dashboarding and visualization layer</td>
 </tr>
 </tbody>
@@ -1134,19 +1134,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="in">  Cloud Function (Python)          ← Extract &amp; Load</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="in">        │</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="in">        ▼</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="in">  BigQuery – raw dataset           ← Raw tables (source-faithful)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="in">  BigQuery - raw dataset           ← Raw tables (source-faithful)</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="in">        │</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="in">        ▼</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="in">  dbt – staging models             ← Type casting, renaming, light cleaning</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="in">  dbt - staging models             ← Type casting, renaming, light cleaning</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="in">        │</span></span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="in">        ▼</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="in">  dbt – mart models                ← Star schema (facts + dimensions)</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="in">  dbt - mart models                ← Star schema (facts + dimensions)</span></span>
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="in">        │</span></span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="in">        ▼</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in">  BigQuery – group_3_marts         ← Final warehouse</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in">  BigQuery - group_3_marts         ← Final warehouse</span></span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">        │</span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">        ▼</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">  Looker Studio (Data Studio)      ← Visualization &amp; dashboards</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">  Data Studio (Looker Studio)      ← Visualization &amp; dashboards</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>---</span>
@@ -1156,11 +1156,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Tool <span class="pp">|</span> Purpose <span class="pp">|</span></span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="pp">|------|---------|</span></span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Socrata Open Data API** <span class="pp">|</span> Extracted both source datasets from NYC Open Data <span class="pp">|</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Google Cloud Functions (Python)** <span class="pp">|</span> Serverless extract-and-load scripts that wrote raw data to BigQuery <span class="pp">|</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Google Cloud Functions (Python)** <span class="pp">|</span> Server-less extract-and-load scripts that wrote raw data to BigQuery <span class="pp">|</span></span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Google BigQuery** <span class="pp">|</span> Cloud data warehouse → hosts raw, staging, and mart datasets <span class="pp">|</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **dbt (data build tool)** <span class="pp">|</span> SQL-based transformation framework; manages staging → mart models with lineage tracking <span class="pp">|</span></span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **GitHub** <span class="pp">|</span> Version control for all dbt models, macros, and project config <span class="pp">|</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Looker Studio (Data Studio)** <span class="pp">|</span> BI dashboarding and visualization layer <span class="pp">|</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Data Studio (Looker Studio)** <span class="pp">|</span> BI dashboarding and visualization layer <span class="pp">|</span></span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
