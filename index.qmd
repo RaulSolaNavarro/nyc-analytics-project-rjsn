@@ -102,13 +102,13 @@ response times.
 
 ### Group Members
 
-| Name | Role | GitHub |
-|------|------|--------|
-| Zesen Chen | *Technician* | [See Portfolio](https://github.com/ZesenS) |
-| Bridgette Wang | *Detail Manager* | [See Portfolio](https://github.com/wqiaop-glitch) |
-| Paven Oommen | *Communicator* | [See Portfolio](https://github.com/PAVEN227) |
-| Sung Ik Park | *Technician* | [See Portfolio](https://github.com/sungikpark8263-cloud) |
-| Raúl J. Solá Navarro | *Facilitator* | [See Portfolio](https://github.com/RaulSolaNavarro) |
+| Name | Role | Links |
+|------|------|-------|
+| Bridgette Wang | *Detail Manager* | [<i class="bi bi-github"></i> GitHub](https://github.com/wqiaop-glitch) · [📫 Email](mailto:qiaoping.wang10@stu-mail.baruch.cuny.edu) |
+| Paven Oommen | *Communicator* | [<i class="bi bi-github"></i> GitHub](https://github.com/PAVEN227) · [📫 Email](mailto:paven.oommen55@stu-mail.baruch.cuny.edu) |
+| Sung Ik Park | *Technician* | [<i class="bi bi-github"></i> GitHub](https://github.com/sungikpark8263-cloud) · [📫 Email](mailto:sungik.park62@stu-mail.baruch.cuny.edu) |
+| Zesen Chen | *Technician* | [<i class="bi bi-github"></i> GitHub](https://github.com/ZesenS) · [📫 Email](mailto:zesen.chen37@stu-mail.baruch.cuny.edu) |
+| Raúl J. Solá Navarro | *Facilitator* | [<i class="bi bi-github"></i> GitHub](https://github.com/RaulSolaNavarro) · [📫 Email](mailto:raul.solanavarro58@stu-mail.baruch.cuny.edu) |
 
 ### Navigation
 
