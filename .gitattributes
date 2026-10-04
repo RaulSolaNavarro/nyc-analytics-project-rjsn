@@ -1,0 +1,5 @@
+*.html linguist-generated=true
+*.css linguist-generated=true
+docs/* linguist-vendored=true
+*_files/* linguist-generated=true
+site_libs/* linguist-vendored=true
