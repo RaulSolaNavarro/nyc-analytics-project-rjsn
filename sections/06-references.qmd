@@ -29,9 +29,9 @@ dbt Labs. *dbt Core: open-source data transformation tool.*
 URL: <https://www.getdbt.com>  
 Version: *(add version used)*
 
-**Google Data Studio (formerly Looker Studio)**  
-Google LLC. *Data Studio: free data visualization and BI tool.*  
-URL: <https://datastudio.google.com>
+**Looker Studio (formerly Google Data Studio)**  
+Google LLC. *Looker Studio: free data visualization and BI tool.*  
+URL: <https://lookerstudio.google.com>
 
 **Socrata Open Data API**  
 Tyler Technologies. *Socrata API documentation.*  
@@ -68,7 +68,7 @@ Project: `raul-cis-9440-spring2026`
 Datasets: `group_3_raw`, `group_3_staging`, `group_3_marts`  
 Access shared with: `jaclyn.cohen@baruch.cuny.edu`
 
-**Data Studio Dashboard**  
+**Looker Studio Dashboard**  
 URL: *(https://datastudio.google.com/reporting/b7835c43-9acb-4aa1-9cd6-e9230b5421d8)*  
 Access shared with: `jaclyn.cohen@baruch.cuny.edu`
 
@@ -88,14 +88,15 @@ Portions of this project's technical implementation and documentation were devel
 
 - **Project report structure & documentation**: Scaffolding the Quarto website layout, section organization, and markdown formatting across all `.qmd` files
 - **SQL queries**: Initial drafts and structural patterns for several BigQuery analytical queries (Queries 1–9); all queries were reviewed, tested, and validated against actual data by the team
+- **Validation pass and revisions**: Reconciliation checks of query outputs against source counts, which led to two SQL corrections (de-duplicating `dim_incident_location` in Query 6, and computing traffic at the segment-day grain in Queries 4, 5, 7 and 9), and to AI-assisted revision of the written findings and conclusions to match the corrected results
 - **dbt model structure**: Guidance on staging and mart layer organization, macro usage, and DAG structure
 - **BigQuery / GCP configuration**: Assistance with dataset organization, table creation syntax, and Cloud Function architecture patterns
-- **Data Studio**: Guidance on chart configuration, cross-source joins, and dashboard layout decisions
+- **Looker Studio**: Guidance on chart configuration, cross-source joins, and dashboard layout decisions
 - **GitHub / version control**: Assistance with repository structure, `.gitignore` configuration, and Quarto-to-GitHub Pages publishing setup
 
 The following work was completed entirely by the team without AI assistance:
 
-- All written analysis, findings, and narrative conclusions
+- The original written analysis and narrative conclusions (drafted before the validation pass described above)
 - Dimensional model design and all dbdiagram.io ERD work
 - Data source selection, exploration, and project proposal
 - All stakeholder framing and KPI definitions

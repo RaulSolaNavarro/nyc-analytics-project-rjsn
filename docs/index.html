@@ -428,11 +428,11 @@ How does agency response time for road repairs vary between high-traffic zones a
 </tr>
 <tr class="even">
 <td><strong>Traffic-to-Repair Correlation (T2R)</strong></td>
-<td>Statistical measure across zip codes: Do higher traffic volumes correlate with faster or slower resolution?</td>
+<td>Do higher traffic volumes go with faster or slower resolution? Computed at the borough level (five data points), so it is a descriptive comparison, not a statistical test</td>
 </tr>
 <tr class="odd">
 <td><strong>Peak-Load Service Lag</strong></td>
-<td>Avg days-to-close during peak traffic months vs.&nbsp;annual average</td>
+<td>Avg days-to-close in peak traffic months vs.&nbsp;non-peak months, where “peak” means the counted street segments were busier than their own average</td>
 </tr>
 </tbody>
 </table>
@@ -475,11 +475,11 @@ How does agency response time for road repairs vary between high-traffic zones a
 <h2 class="anchored" data-anchor-id="project-summary">Project Summary</h2>
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-value">944,395</div>
+    <div class="kpi-value">905,534</div>
     <div class="kpi-label">Total street complaints</div>
   </div>
   <div class="kpi-card">
-    <div class="kpi-value">11 days</div>
+    <div class="kpi-value">12 days</div>
     <div class="kpi-label">Avg citywide close time</div>
   </div>
   <div class="kpi-card">
@@ -491,7 +491,7 @@ How does agency response time for road repairs vary between high-traffic zones a
     <div class="kpi-label">Data time range</div>
   </div>
   <div class="kpi-card">
-    <div class="kpi-value">250+</div>
+    <div class="kpi-value">234</div>
     <div class="kpi-label">ZIP codes covered</div>
   </div>
   <div class="kpi-card">
@@ -1070,8 +1070,8 @@ How does agency response time for road repairs vary between high-traffic zones a
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> KPI <span class="pp">|</span> Description <span class="pp">|</span></span>
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----|-------------|</span></span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Pothole Incidence Rate (PIR)** <span class="pp">|</span> Total "Street Condition" complaints ÷ avg daily traffic volume per segment <span class="pp">|</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Traffic-to-Repair Correlation (T2R)** <span class="pp">|</span> Statistical measure across zip codes: Do higher traffic volumes correlate with faster or slower resolution? <span class="pp">|</span></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Peak-Load Service Lag** <span class="pp">|</span> Avg days-to-close during peak traffic months vs. annual average <span class="pp">|</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Traffic-to-Repair Correlation (T2R)** <span class="pp">|</span> Do higher traffic volumes go with faster or slower resolution? Computed at the borough level (five data points), so it is a descriptive comparison, not a statistical test <span class="pp">|</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Peak-Load Service Lag** <span class="pp">|</span> Avg days-to-close in peak traffic months vs. non-peak months, where "peak" means the counted street segments were busier than their own average <span class="pp">|</span></span>
 <span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data Sources</span></span>
 <span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
@@ -1096,11 +1096,11 @@ How does agency response time for road repairs vary between high-traffic zones a
 <span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
 <span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="kpi-grid"&gt;</span></span>
 <span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="kpi-card"&gt;</span></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-value"&gt;944,395&lt;/div&gt;</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-value"&gt;905,534&lt;/div&gt;</span></span>
 <span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-label"&gt;Total street complaints&lt;/div&gt;</span></span>
 <span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
 <span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="kpi-card"&gt;</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-value"&gt;11 days&lt;/div&gt;</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-value"&gt;12 days&lt;/div&gt;</span></span>
 <span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-label"&gt;Avg citywide close time&lt;/div&gt;</span></span>
 <span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
 <span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="kpi-card"&gt;</span></span>
@@ -1112,7 +1112,7 @@ How does agency response time for road repairs vary between high-traffic zones a
 <span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-label"&gt;Data time range&lt;/div&gt;</span></span>
 <span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
 <span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="kpi-card"&gt;</span></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-value"&gt;250+&lt;/div&gt;</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-value"&gt;234&lt;/div&gt;</span></span>
 <span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="kpi-label"&gt;ZIP codes covered&lt;/div&gt;</span></span>
 <span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
 <span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="kpi-card"&gt;</span></span>

@@ -162,6 +162,30 @@ a standard Kimball role-playing dimension pattern.
 :::
 
 ::: {.callout-warning}
+**Known data issue: duplicate keys in `Dim_Incident_Location`**  
+In the built warehouse table (`dim_incident_location`), the key column
+`incident_location_key` is not unique: several rows share the same key, and each
+copy carries the same ZIP code. Joining the 311 fact table straight to this
+dimension repeats each complaint once per copy. This inflated the first version of
+the ZIP-level counts (Query 6) above the true borough totals. Query 6 now collapses
+the dimension to one row per key before joining, and the ZIP table reconciles to the
+borough totals. A `unique` test on this key should be added to the dbt project so the
+duplicates are caught at build time.
+
+The model diagram shows logical column names (`incident_location_id`,
+`incident_zip_code`). The built table uses `incident_location_key` and `zip_code`.
+:::
+
+::: {.callout-note}
+**Analysis grain for traffic**  
+The traffic fact table stores 15-minute counts per segment and direction. The DOT
+counts only a few segments per borough on a given day, so the analysis queries first
+sum `vol` to one value per segment per day and then average across those segment-days.
+Summing across every segment counted in a borough-day would reward boroughs that
+simply had more segments counted.
+:::
+
+::: {.callout-warning}
 **Known challenge: geographic join between marts**  
 The 311 data provides borough + zip code, while the traffic data provides a road
 segment + WKT geometry. Cross-mart geographic joins are therefore at the

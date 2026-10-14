@@ -890,6 +890,35 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p><strong>Known data issue: duplicate keys in <code>Dim_Incident_Location</code></strong><br>
+In the built warehouse table (<code>dim_incident_location</code>), the key column <code>incident_location_key</code> is not unique: several rows share the same key, and each copy carries the same ZIP code. Joining the 311 fact table straight to this dimension repeats each complaint once per copy. This inflated the first version of the ZIP-level counts (Query 6) above the true borough totals. Query 6 now collapses the dimension to one row per key before joining, and the ZIP table reconciles to the borough totals. A <code>unique</code> test on this key should be added to the dbt project so the duplicates are caught at build time.</p>
+<p>The model diagram shows logical column names (<code>incident_location_id</code>, <code>incident_zip_code</code>). The built table uses <code>incident_location_key</code> and <code>zip_code</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Analysis grain for traffic</strong><br>
+The traffic fact table stores 15-minute counts per segment and direction. The DOT counts only a few segments per borough on a given day, so the analysis queries first sum <code>vol</code> to one value per segment per day and then average across those segment-days. Summing across every segment counted in a borough-day would reward boroughs that simply had more segments counted.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p><strong>Known challenge: geographic join between marts</strong><br>
 The 311 data provides borough + zip code, while the traffic data provides a road segment + WKT geometry. Cross-mart geographic joins are therefore at the <strong>borough level</strong> rather than street-segment level. This is noted as a limitation in the Conclusion section.</p>
 </div>
@@ -1537,20 +1566,44 @@ The 311 data provides borough + zip code, while the traffic data provides a road
 <span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>**Known challenge: geographic join between marts**  </span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>The 311 data provides borough + zip code, while the traffic data provides a road</span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>segment + WKT geometry. Cross-mart geographic joins are therefore at the</span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>**borough level** rather than street-segment level. This is noted as a limitation in</span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>the Conclusion section.</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="fu">## DBML Source</span></span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>The full DBML source for this model is version-controlled in the project repository.</span>
-<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🔗 **[View DBML on GitHub](https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn/blob/main/models/group_3_project/CIS_9440UTA_group_3_milestone3_model_final.dbml)**</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>**Known data issue: duplicate keys in `Dim_Incident_Location`**  </span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>In the built warehouse table (<span class="in">`dim_incident_location`</span>), the key column</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="in">`incident_location_key`</span> is not unique: several rows share the same key, and each</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>copy carries the same ZIP code. Joining the 311 fact table straight to this</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>dimension repeats each complaint once per copy. This inflated the first version of</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>the ZIP-level counts (Query 6) above the true borough totals. Query 6 now collapses</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>the dimension to one row per key before joining, and the ZIP table reconciles to the</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>borough totals. A <span class="in">`unique`</span> test on this key should be added to the dbt project so the</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>duplicates are caught at build time.</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>The model diagram shows logical column names (<span class="in">`incident_location_id`</span>,</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="in">`incident_zip_code`</span>). The built table uses <span class="in">`incident_location_key`</span> and <span class="in">`zip_code`</span>.</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>**Analysis grain for traffic**  </span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>The traffic fact table stores 15-minute counts per segment and direction. The DOT</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>counts only a few segments per borough on a given day, so the analysis queries first</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>sum <span class="in">`vol`</span> to one value per segment per day and then average across those segment-days.</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>Summing across every segment counted in a borough-day would reward boroughs that</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>simply had more segments counted.</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>**Known challenge: geographic join between marts**  </span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>The 311 data provides borough + zip code, while the traffic data provides a road</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>segment + WKT geometry. Cross-mart geographic joins are therefore at the</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>**borough level** rather than street-segment level. This is noted as a limitation in</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>the Conclusion section.</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a><span class="fu">## DBML Source</span></span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>The full DBML source for this model is version-controlled in the project repository.</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🔗 **[View DBML on GitHub](https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn/blob/main/models/group_3_project/CIS_9440UTA_group_3_milestone3_model_final.dbml)**</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

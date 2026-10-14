@@ -356,7 +356,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#bigquery-datasets-final-state" id="toc-bigquery-datasets-final-state" class="nav-link" data-scroll-target="#bigquery-datasets-final-state">BigQuery Datasets → Final State</a></li>
   </ul></li>
   <li><a href="#dbt-project-config" id="toc-dbt-project-config" class="nav-link" data-scroll-target="#dbt-project-config">dbt Project Config</a></li>
-  <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
+  <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a>
+  <ul class="collapse">
+  <li><a href="#data-quality-note" id="toc-data-quality-note" class="nav-link" data-scroll-target="#data-quality-note">Data quality note</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -404,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   BigQuery - group_3_marts         ← Final warehouse
         │
         ▼
-  Data Studio (Looker Studio)      ← Visualization &amp; dashboards</code></pre>
+  Looker Studio                    ← Visualization &amp; dashboards</code></pre>
 <hr>
 </section>
 <section id="tools-used" class="level2">
@@ -442,7 +445,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Version control for all dbt models, macros, and project config</td>
 </tr>
 <tr class="even">
-<td><strong>Data Studio (Looker Studio)</strong></td>
+<td><strong>Looker Studio</strong></td>
 <td>BI dashboarding and visualization layer</td>
 </tr>
 </tbody>
@@ -453,7 +456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="extract-load">Extract &amp; Load</h2>
 <section id="cloud-functions" class="level3">
 <h3 class="anchored" data-anchor-id="cloud-functions">Cloud Functions</h3>
-<p>Both data sources were extracted from the NYC Open Data Socrata API using Google Cloud Functions written in Python. Each function authenticated with the API, paginated through results filtered to the 2020-2025 date range, and loaded the raw JSON responses directly into BigQuery.</p>
+<p>Both data sources were extracted from the NYC Open Data Socrata API using Google Cloud Functions written in Python. Each function authenticated with the API, paginated through results filtered to the 2020-2025 date range, and loaded the raw JSON responses directly into BigQuery. The extracts also contained some records from 2026 (38,861 street-related 311 complaints and some traffic counts), so the analysis queries filter to 2020 through 2025 explicitly.</p>
 <section id="service-requests" class="level4">
 <h4 class="anchored" data-anchor-id="service-requests">311 Service Requests</h4>
 <div class="quarto-figure quarto-figure-center">
@@ -534,7 +537,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="dag-lineage" class="level3">
 <h3 class="anchored" data-anchor-id="dag-lineage">DAG Lineage</h3>
 <p>The dbt DAG lineage graph below shows the full dependency chain from raw sources through staging to the final mart tables.</p>
-<p><img src="../images/dbt-dag.png" class="img-fluid" alt="dbt DAG lineage graph"> <img src="../images/dbt-dag.png" class="img-fluid" alt="dbt DAG lineage graph"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/dbt-dag.png" class="img-fluid figure-img" alt="dbt DAG lineage graph"></p>
+<figcaption>dbt lineage DAG showing the transformation pipeline from raw sources through staging to mart tables.</figcaption>
+</figure>
+</div>
 </section>
 <section id="staging-layer" class="level3">
 <h3 class="anchored" data-anchor-id="staging-layer">Staging Layer</h3>
@@ -646,12 +654,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Set up a BigQuery project and configure <code>profiles.yml</code> with your credentials</li>
 <li>Run the Cloud Function (or equivalent) to load raw data</li>
 <li>From the repo root: <code>dbt deps &amp;&amp; dbt run &amp;&amp; dbt test</code></li>
-<li>Run the Milestone 5 SQL queries (<code>queries/milestone5_queries.sql</code>) in BigQuery to create the analytics mart tables used by Looker Studio</li>
+<li>Run the Milestone 5 SQL queries (<code>queries/milestone5_queries.sql</code>) in BigQuery to create the analytics mart tables used by Looker Studio. The tables are built with <code>CREATE OR REPLACE TABLE</code>, so rerunning refreshes them. Run order matters because Query 8 reads tables built by Queries 2 and 7: the Query 1, 2 and 3 tables, then Query 6, 4, 7, 5, 8, 9.</li>
 </ol>
+<section id="data-quality-note" class="level3">
+<h3 class="anchored" data-anchor-id="data-quality-note">Data quality note</h3>
+<p><code>dim_incident_location</code> contains repeated values of <code>incident_location_key</code>. The analysis queries handle this by collapsing the dimension to one row per key before joining (see Query 6). Adding a dbt <code>unique</code> test on that key is the recommended fix at the pipeline level.</p>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1146,7 +1158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="in">  BigQuery - group_3_marts         ← Final warehouse</span></span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="in">        │</span></span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="in">        ▼</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">  Data Studio (Looker Studio)      ← Visualization &amp; dashboards</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="in">  Looker Studio                    ← Visualization &amp; dashboards</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>---</span>
@@ -1160,7 +1172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Google BigQuery** <span class="pp">|</span> Cloud data warehouse → hosts raw, staging, and mart datasets <span class="pp">|</span></span>
 <span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **dbt (data build tool)** <span class="pp">|</span> SQL-based transformation framework; manages staging → mart models with lineage tracking <span class="pp">|</span></span>
 <span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **GitHub** <span class="pp">|</span> Version control for all dbt models, macros, and project config <span class="pp">|</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Data Studio (Looker Studio)** <span class="pp">|</span> BI dashboarding and visualization layer <span class="pp">|</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Looker Studio** <span class="pp">|</span> BI dashboarding and visualization layer <span class="pp">|</span></span>
 <span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
@@ -1171,112 +1183,122 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>Both data sources were extracted from the NYC Open Data Socrata API using</span>
 <span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>Google Cloud Functions written in Python. Each function authenticated with the API,</span>
 <span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>paginated through results filtered to the 2020-2025 date range, and loaded the</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>raw JSON responses directly into BigQuery.</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 311 Service Requests</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>raw JSON responses directly into BigQuery. The extracts also contained some records</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>from 2026 (38,861 street-related 311 complaints and some traffic counts), so the</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>analysis queries filter to 2020 through 2025 explicitly.</span>
 <span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="al">![Cloud Function for extracting and loading NYC 311 Service Requests into BigQuery.](../images/cloud-function-311.png)</span>{fig-alt="Screenshot of Cloud Function - 311 Service Requests"}</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 311 Service Requests</span></span>
 <span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Traffic Volume Counts</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="al">![Cloud Function for extracting and loading NYC 311 Service Requests into BigQuery.](../images/cloud-function-311.png)</span>{fig-alt="Screenshot of Cloud Function - 311 Service Requests"}</span>
 <span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="al">![Cloud Function for extracting and loading DOT Automated Traffic Volume Counts into BigQuery.](../images/cloud-function-traffic.png)</span>{fig-alt="Screenshot of Cloud Function - Traffic Volume Counts"}</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Traffic Volume Counts</span></span>
 <span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="fu">### Raw Tables in BigQuery</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="al">![Cloud Function for extracting and loading DOT Automated Traffic Volume Counts into BigQuery.](../images/cloud-function-traffic.png)</span>{fig-alt="Screenshot of Cloud Function - Traffic Volume Counts"}</span>
 <span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>After extraction, two raw tables existed in BigQuery:</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="fu">### Raw Tables in BigQuery</span></span>
 <span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Dataset <span class="pp">|</span> Table <span class="pp">|</span> Description <span class="pp">|</span></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-------|-------------|</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`group_3_raw`</span> <span class="pp">|</span> <span class="in">`raw_311_service_requests`</span> <span class="pp">|</span> All NYC 311 service requests filtered to street-related complaint types, 2020-2025 <span class="pp">|</span></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`group_3_raw`</span> <span class="pp">|</span> <span class="in">`raw_traffic_volume_counts`</span> <span class="pp">|</span> DOT automated traffic count records at 15-minute intervals, 2020-2025 <span class="pp">|</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol=2}</span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="al">![BigQuery raw table: `raw_311_service_requests`](../images/bq-raw-311.png)</span>{fig-alt="BQ screenshot → 311 raw table"}</span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="al">![BigQuery raw table: `raw_traffic_volume_counts`](../images/bq-raw-traffic.png)</span>{fig-alt="BQ screenshot → traffic raw table"}</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>After extraction, two raw tables existed in BigQuery:</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Dataset <span class="pp">|</span> Table <span class="pp">|</span> Description <span class="pp">|</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|-------|-------------|</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`group_3_raw`</span> <span class="pp">|</span> <span class="in">`raw_311_service_requests`</span> <span class="pp">|</span> All NYC 311 service requests filtered to street-related complaint types, 2020-2025 <span class="pp">|</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`group_3_raw`</span> <span class="pp">|</span> <span class="in">`raw_traffic_volume_counts`</span> <span class="pp">|</span> DOT automated traffic count records at 15-minute intervals, 2020-2025 <span class="pp">|</span></span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>::: {layout-ncol=2}</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="al">![BigQuery raw table: `raw_311_service_requests`](../images/bq-raw-311.png)</span>{fig-alt="BQ screenshot → 311 raw table"}</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a><span class="al">![BigQuery raw table: `raw_traffic_volume_counts`](../images/bq-raw-traffic.png)</span>{fig-alt="BQ screenshot → traffic raw table"}</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Transform → dbt Models</span></span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>All transformations were written in dbt SQL and are version-controlled in the</span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>project GitHub repository.</span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🔗 **[View dbt models on GitHub](https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn/tree/main/models)**</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a><span class="fu">## Transform → dbt Models</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>All transformations were written in dbt SQL and are version-controlled in the</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>project GitHub repository.</span>
 <span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="fu">### DAG Lineage</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🔗 **[View dbt models on GitHub](https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn/tree/main/models)**</span></span>
 <span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>The dbt DAG lineage graph below shows the full dependency chain from raw sources</span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>through staging to the final mart tables.</span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="al">![dbt lineage DAG showing the transformation pipeline from raw sources through staging to mart tables.](../images/dbt-dag.png)</span>{fig-alt="dbt DAG lineage graph"}</span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="al">![dbt lineage DAG...](../images/dbt-dag.png)</span>{fig-alt="dbt DAG lineage graph"}</span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### Staging Layer</span></span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>Staging models perform light transformation on the raw tables: renaming columns to</span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>consistent snake_case, casting types, and filtering out clearly invalid records</span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>(e.g., closed dates earlier than created dates).</span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>Key staging transformations for <span class="in">`stg_311_service_requests`</span>:</span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Parsed <span class="in">`created_date`</span>, <span class="in">`closed_date`</span>, <span class="in">`due_date`</span> as <span class="in">`DATE`</span> types (source is string)</span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Extracted <span class="in">`year`</span>, <span class="in">`month`</span>, <span class="in">`day`</span> to support date dimension surrogate key generation</span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Filtered complaint types to the five street-related categories</span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Standardized borough names to title case</span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>Key staging transformations for <span class="in">`stg_traffic_volume_counts`</span>:</span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Parsed <span class="in">`date`</span> column as <span class="in">`DATE`</span></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Extracted <span class="in">`hour`</span> and <span class="in">`minute`</span> from the timestamp string</span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Mapped <span class="in">`segmentid`</span> to the street segment dimension</span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Filtered to records within 2020–2025</span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mart Layer</span></span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>The mart layer implements the full star-schema dimensional model. dbt models</span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>create each dimension table first (using <span class="in">`{ generate_surrogate_key() }`</span></span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>for surrogate keys), then the fact tables that reference them.</span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> dbt Model <span class="pp">|</span> Target Table <span class="pp">|</span> Type <span class="pp">|</span></span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|-------------|------|</span></span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_date`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_date`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_time`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_time`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_location`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_location`</span> <span class="pp">|</span> Dimension (conformed) <span class="pp">|</span></span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_problem`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_problem`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_agency`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_agency`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_incident_location`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_incident_location`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_street_segment`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_street_segment`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fact_311service_request`</span> <span class="pp">|</span> <span class="in">`group_3_marts.fact_311service_request`</span> <span class="pp">|</span> Fact <span class="pp">|</span></span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fact_traffic_volume`</span> <span class="pp">|</span> <span class="in">`group_3_marts.fact_traffic_volume`</span> <span class="pp">|</span> Fact <span class="pp">|</span></span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="fu">### BigQuery Datasets → Final State</span></span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="al">![BigQuery resource panel showing raw, staging, and mart datasets.](../images/bq-datasets.png)</span>{fig-alt="BigQuery datasets screenshot"}</span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## dbt Project Config</span></span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>The <span class="in">`dbt_project.yml`</span> and <span class="in">`packages.yml`</span> are in the repository root. The project</span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>uses the <span class="in">`generate_schema_name`</span> macro to keep dataset names consistent across</span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>environments.</span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🔗 **[dbt_project.yml on GitHub](https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn/blob/main/dbt_project.yml)**</span></span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducibility</span></span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>To reproduce the full pipeline from scratch:</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Clone the GitHub repository</span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Set up a BigQuery project and configure <span class="in">`profiles.yml`</span> with your credentials</span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Run the Cloud Function (or equivalent) to load raw data</span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>From the repo root: <span class="in">`dbt deps &amp;&amp; dbt run &amp;&amp; dbt test`</span></span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Run the Milestone 5 SQL queries (<span class="in">`queries/milestone5_queries.sql`</span>) in BigQuery</span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>   to create the analytics mart tables used by Looker Studio</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="fu">### DAG Lineage</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>The dbt DAG lineage graph below shows the full dependency chain from raw sources</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>through staging to the final mart tables.</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="al">![dbt lineage DAG showing the transformation pipeline from raw sources through staging to mart tables.](../images/dbt-dag.png)</span>{fig-alt="dbt DAG lineage graph"}</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="fu">### Staging Layer</span></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>Staging models perform light transformation on the raw tables: renaming columns to</span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>consistent snake_case, casting types, and filtering out clearly invalid records</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>(e.g., closed dates earlier than created dates).</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>Key staging transformations for <span class="in">`stg_311_service_requests`</span>:</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Parsed <span class="in">`created_date`</span>, <span class="in">`closed_date`</span>, <span class="in">`due_date`</span> as <span class="in">`DATE`</span> types (source is string)</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Extracted <span class="in">`year`</span>, <span class="in">`month`</span>, <span class="in">`day`</span> to support date dimension surrogate key generation</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Filtered complaint types to the five street-related categories</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Standardized borough names to title case</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>Key staging transformations for <span class="in">`stg_traffic_volume_counts`</span>:</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Parsed <span class="in">`date`</span> column as <span class="in">`DATE`</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Extracted <span class="in">`hour`</span> and <span class="in">`minute`</span> from the timestamp string</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Mapped <span class="in">`segmentid`</span> to the street segment dimension</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Filtered to records within 2020–2025</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mart Layer</span></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>The mart layer implements the full star-schema dimensional model. dbt models</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>create each dimension table first (using <span class="in">`{ generate_surrogate_key() }`</span></span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>for surrogate keys), then the fact tables that reference them.</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> dbt Model <span class="pp">|</span> Target Table <span class="pp">|</span> Type <span class="pp">|</span></span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------|-------------|------|</span></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_date`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_date`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_time`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_time`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_location`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_location`</span> <span class="pp">|</span> Dimension (conformed) <span class="pp">|</span></span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_problem`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_problem`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_agency`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_agency`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_incident_location`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_incident_location`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`dim_street_segment`</span> <span class="pp">|</span> <span class="in">`group_3_marts.dim_street_segment`</span> <span class="pp">|</span> Dimension <span class="pp">|</span></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fact_311service_request`</span> <span class="pp">|</span> <span class="in">`group_3_marts.fact_311service_request`</span> <span class="pp">|</span> Fact <span class="pp">|</span></span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`fact_traffic_volume`</span> <span class="pp">|</span> <span class="in">`group_3_marts.fact_traffic_volume`</span> <span class="pp">|</span> Fact <span class="pp">|</span></span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### BigQuery Datasets → Final State</span></span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="al">![BigQuery resource panel showing raw, staging, and mart datasets.](../images/bq-datasets.png)</span>{fig-alt="BigQuery datasets screenshot"}</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a><span class="fu">## dbt Project Config</span></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>The <span class="in">`dbt_project.yml`</span> and <span class="in">`packages.yml`</span> are in the repository root. The project</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>uses the <span class="in">`generate_schema_name`</span> macro to keep dataset names consistent across</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>environments.</span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; 🔗 **[dbt_project.yml on GitHub](https://github.com/RaulSolaNavarro/nyc-analytics-project-rjsn/blob/main/dbt_project.yml)**</span></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducibility</span></span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>To reproduce the full pipeline from scratch:</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Clone the GitHub repository</span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Set up a BigQuery project and configure <span class="in">`profiles.yml`</span> with your credentials</span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Run the Cloud Function (or equivalent) to load raw data</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>From the repo root: <span class="in">`dbt deps &amp;&amp; dbt run &amp;&amp; dbt test`</span></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Run the Milestone 5 SQL queries (<span class="in">`queries/milestone5_queries.sql`</span>) in BigQuery</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>   to create the analytics mart tables used by Looker Studio. The tables are built</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>   with <span class="in">`CREATE OR REPLACE TABLE`</span>, so rerunning refreshes them. Run order matters</span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>   because Query 8 reads tables built by Queries 2 and 7: the Query 1, 2 and 3 tables, then Query 6, 4, 7, 5, 8, 9.</span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data quality note</span></span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a><span class="in">`dim_incident_location`</span> contains repeated values of <span class="in">`incident_location_key`</span>. The</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>analysis queries handle this by collapsing the dimension to one row per key before</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>joining (see Query 6). Adding a dbt <span class="in">`unique`</span> test on that key is the recommended fix</span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>at the pipeline level.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

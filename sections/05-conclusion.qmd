@@ -10,36 +10,52 @@ automated traffic volume counts from 2020 to 2025.
 
 ### Q1: Does traffic volume correlate with complaint frequency?
 
-The data reveals a **nuanced, non-linear relationship** between traffic volume
-and complaint frequency at the borough level. Manhattan carries the highest
-average daily traffic volume (~28,000 vehicles/day at sensor locations) yet ranks
-third in total complaints. Queens generates the most complaints despite having
-lower sensor-measured traffic than Manhattan or the Bronx.
+At the borough level, we found **no clear relationship**. Manhattan carries the
+highest average daily traffic (about 13,500 vehicles per counted street segment per
+day) yet ranks third in total complaints (154,282). Staten Island has the second
+highest traffic (about 12,300) and the fewest complaints (77,886), while Queens has
+the most complaints (279,093) with the third highest traffic (about 10,000). Across
+the five boroughs, the traffic ranking and the complaint ranking do not match.
+
+The traffic comparison deserves caution. The DOT counted only a small number of
+segments, so each borough's average rests on few observations (178 segment-days in
+Staten Island, 639 in the Bronx, 739 in Manhattan, 1,179 in Queens, and 1,454 in
+Brooklyn), and a different set of counted segments could reorder the boroughs.
 
 This suggests that **raw traffic volume is an incomplete predictor** of complaint
-frequency. Other factors including road age, lane miles, residential density, and reporting
-behavior, likely contribute. The `complaints_per_million_vehicles` metric
-(Query 5) provides a more normalized view: Staten Island, despite lower absolute
-traffic, shows a disproportionately high complaint rate relative to measured volume,
-pointing to either older road infrastructure or denser residential reporting.
+frequency. Other factors, including road age, lane miles, residential density, and
+reporting behavior, likely contribute, but this project did not test them.
 
-The **T2R metric** (Query 8) and **Peak-Load Service Lag KPI** (Query 9) add further
-nuance: response times during peak traffic months (11.99 days avg) are actually
-*slightly faster* than during non-peak months (12.90 days). The T2R borough
-comparison shows no consistent pattern between traffic volume and repair speed,
-suggesting that factors other than traffic load, such as staffing levels, borough
-geography, or complaint type mix, are the primary drivers of response time variation.
+The **T2R metric** (Query 8) and **Peak-Load Service Lag KPI** (Query 9) point the
+same way. Days to close shows no consistent pattern with traffic: Staten Island has
+the second highest traffic and the fastest closure, Brooklyn (fourth in traffic) is
+the slowest, and the Bronx (lowest traffic) is the second fastest. Five data points
+cannot support a statistical claim. For peak load, we defined peak months with a
+within-segment traffic index so that the result does not depend on which segments the
+DOT happened to count. Average closure time was **12.66 days in peak months and 12.69
+days in non-peak months**, with a median of 1 day in both. We observed no difference,
+which is not the same as proving that no lag exists, because the traffic counts are
+sparse and no significance test was run.
 
 ### Q2: Does response time vary across boroughs?
 
-Yes, substantially. Brooklyn takes an average of **14 days** to close a street
-complaint; Staten Island closes in just **7 days**. This gap is notable given that
-Staten Island has the highest-complaint ZIP codes by absolute count (10306 at 48,704).
+Yes. Brooklyn takes an average of **14.1 days** to close a street complaint, followed
+by Manhattan (13.4), Queens (12.8), and the Bronx (10.4). Staten Island closes in just
+**6.8 days**, about half of Brooklyn's time.
 
-The Bronx result is worth highlighting: it ranks 2nd in average daily traffic but
-4th in response time (10 days), suggesting that traffic volume does not automatically
-create a maintenance lag in all boroughs. Whether this reflects staffing differences,
-complaint types, or geographic compactness requires further investigation.
+Staten Island has the fewest complaints of any borough, yet three of its ZIP codes
+(10314, 10306, and 10312) are in the citywide top five by complaint count. Because
+those are raw counts with no population or street-mile denominator, they show where
+complaints concentrate, not where roads are worst.
+
+The Staten Island result is worth highlighting: it has the second highest measured
+traffic and the fastest closure time, the opposite of a traffic-driven lag. Whether
+the differences reflect staffing, complaint types, or geographic compactness requires
+further investigation.
+
+Averages also hide how skewed closure times are. In the Query 9 sample the median
+was 1 day while the average was about 12.7 days, because a minority of tickets stay
+open for a very long time (the longest exceeded 1,900 days).
 
 ---
 
@@ -47,26 +63,28 @@ complaint types, or geographic compactness requires further investigation.
 
 **For the NYC Department of Transportation:**
 
-- Investigate why Brooklyn consistently lags in response time despite being one of
-  the most-complained boroughs. A borough-level staffing or routing analysis could
-  identify whether this is a resource or workflow issue.
-- Consider prioritizing preventive maintenance in Staten Island ZIP codes 10306 and
-  10314, which show very high complaint volumes relative to their size and traffic load.
-- The spring complaint spike observed across all years suggests seasonal readiness
-  planning (winter pothole season → spring complaint wave) could reduce peak lag time.
+- Investigate why Brooklyn has the slowest average closure time (14.1 days) while
+  ranking second in total complaints. A borough-level staffing or routing analysis
+  could identify whether this is a resource or workflow issue.
+- Review Staten Island ZIP codes 10314, 10306, and 10312, which are in the citywide
+  top five by complaint count. Check complaint rates per street mile or household
+  before prioritizing preventive maintenance, since our counts are not normalized.
+- The seasonal chart shows complaints peaking in late winter and spring (March was the
+  peak month in 2022, 2023, and 2024), which suggests that seasonal readiness planning
+  (winter road damage followed by a spring complaint wave) could reduce peak workload.
 
 **For Logistics & Delivery Companies:**
 
-- Queens ZIP codes 11385, 11101, and 11377 represent high complaint density along
-  likely delivery corridors. Route planning tools that incorporate 311 complaint
-  hotspot data could reduce vehicle maintenance costs and delays.
+- Queens ZIP codes 11385 and 11101 have among the highest complaint counts in the
+  city (11,397 and 10,889). Route planning tools that incorporate 311 complaint
+  hotspot data could help reduce vehicle maintenance costs and delays.
 
 **For Urban Planners:**
 
 - The disconnect between traffic sensor coverage and complaint geography highlights
   a data gap: traffic sensors are concentrated in certain corridors, while complaints
   span the full residential street network. Expanding sensor coverage to residential
-  ZIP codes with high complaint rates would enable more precise infrastructure planning.
+  ZIP codes with high complaint counts would enable more precise infrastructure planning.
 
 ---
 
@@ -82,18 +100,40 @@ scope for this project but would substantially strengthen the analysis.
 :::
 
 ::: {.callout-warning}
-**Traffic sensor coverage is not uniform**  
-The DOT traffic count dataset covers a subset of road segments, not the full
-street network. Sensors are more densely placed on arterial and commercial roads.
-This means that residential streetsm, which generate many of the complaints in
-suburban ZIP codes, may be systematically under-counted in the traffic data.
+**Traffic sensor coverage is sparse and uneven**  
+The DOT traffic count dataset covers a subset of road segments, not the full street
+network, and only a few segments are counted in a borough on a given day (about 2.0 to
+2.6 on average). Sensors are more densely placed on arterial and commercial roads, so
+residential streets, which generate many of the complaints in outer-borough ZIP
+codes, may be systematically under-counted. Because of this, traffic is measured as
+the average count per street segment per day, borough averages rest on as few as 178
+segment-days (Staten Island), and some months have too few counts to use (Query 9
+excludes months with fewer than 30 segment-days). Borough traffic rankings should
+therefore be treated as indicative only.
 :::
 
 ::: {.callout-note}
-**Traffic counts do not cover the full year**  
+**Traffic counts do not cover the full period**  
 The DOT records traffic at specific segments for specific periods; not all segments
-are counted every day. The average daily traffic volume figures used in this analysis
-are averages over counted days only, which may introduce bias toward busier periods.
+are counted every day, and several months in 2020 have no counts at all. The average
+daily traffic figures used in this analysis are averages over counted segment-days only,
+which may introduce bias toward the periods and streets the DOT chose to measure.
+:::
+
+::: {.callout-note}
+**Analysis window**  
+All results cover complaints and traffic counts from 2020 through 2025. The extracts
+also contained 2026 records (38,861 street-related complaints at the time of
+extraction), which were excluded so that every figure describes the same six years.
+:::
+
+::: {.callout-note}
+**Missing ZIP codes**  
+8.6% of street complaints (78,254) have no ZIP code and 0.2% (1,705) carry the invalid
+placeholder "10000". Both are excluded from the ZIP-level map and rankings, which
+cover 91.2% of complaints (825,575). A first version of the ZIP query double-counted
+complaints because `dim_incident_location` has repeated keys; the final query
+de-duplicates the dimension, and the ZIP table now reconciles to the borough totals.
 :::
 
 ::: {.callout-note}
@@ -104,6 +144,12 @@ complaints not because their roads are worse, but because residents are more lik
 to report issues.
 :::
 
+::: {.callout-note}
+**Five boroughs, no significance testing**  
+Borough-level comparisons rest on five data points, and no statistical tests were run.
+The findings are descriptive.
+:::
+
 ---
 
 ## Recommended Follow-Up Analysis
@@ -112,9 +158,10 @@ to report issues.
    snap 311 complaints to their nearest DOT sensor segment, enabling correlation
    analysis at a finer geographic grain.
 
-2. **Complaint type decomposition**: Analyze whether *Street Condition* (potholes)
-   complaints specifically track differently from *Street Light Condition* complaints
-   relative to traffic volume, since potholes are more directly caused by vehicle load.
+2. **Complaint type decomposition**: Analyze whether *Street Condition* complaints
+   (a category that includes potholes among other defects) track differently from
+   *Street Light Condition* complaints relative to traffic volume, since road surface
+   damage is more directly caused by vehicle load.
 
 3. **Year-over-year response time trend**: Query 2 produces a static borough average.
    Adding a year dimension would show whether response times are improving or degrading
@@ -122,5 +169,8 @@ to report issues.
 
 4. **Heavy vehicle sub-analysis**: The original proposal targeted heavy vehicle counts
    (trucks) specifically. The DOT dataset includes vehicle class data that was not fully
-   leveraged here; a filtered analysis on heavy vehicles vs. potholes specifically would
-   better test the infrastructure-degradation hypothesis.
+   leveraged here; a filtered analysis on heavy vehicles vs. road surface complaints
+   would better test the infrastructure-degradation hypothesis.
+
+5. **Normalized complaint rates**: Divide ZIP-level complaint counts by street miles or
+   households so that ZIP codes can be compared on rate, not just on volume.

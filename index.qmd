@@ -48,8 +48,8 @@ response times.
 | KPI | Description |
 |-----|-------------|
 | **Pothole Incidence Rate (PIR)** | Total "Street Condition" complaints ÷ avg daily traffic volume per segment |
-| **Traffic-to-Repair Correlation (T2R)** | Statistical measure across zip codes: Do higher traffic volumes correlate with faster or slower resolution? |
-| **Peak-Load Service Lag** | Avg days-to-close during peak traffic months vs. annual average |
+| **Traffic-to-Repair Correlation (T2R)** | Do higher traffic volumes go with faster or slower resolution? Computed at the borough level (five data points), so it is a descriptive comparison, not a statistical test |
+| **Peak-Load Service Lag** | Avg days-to-close in peak traffic months vs. non-peak months, where "peak" means the counted street segments were busier than their own average |
 
 ### Data Sources
 
@@ -74,11 +74,11 @@ response times.
 ```{=html}
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-value">944,395</div>
+    <div class="kpi-value">905,534</div>
     <div class="kpi-label">Total street complaints</div>
   </div>
   <div class="kpi-card">
-    <div class="kpi-value">11 days</div>
+    <div class="kpi-value">12 days</div>
     <div class="kpi-label">Avg citywide close time</div>
   </div>
   <div class="kpi-card">
@@ -90,7 +90,7 @@ response times.
     <div class="kpi-label">Data time range</div>
   </div>
   <div class="kpi-card">
-    <div class="kpi-value">250+</div>
+    <div class="kpi-value">234</div>
     <div class="kpi-label">ZIP codes covered</div>
   </div>
   <div class="kpi-card">

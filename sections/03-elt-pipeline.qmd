@@ -25,7 +25,7 @@ NYC Open Data (Socrata API)
   BigQuery - group_3_marts         ← Final warehouse
         │
         ▼
-  Data Studio (Looker Studio)      ← Visualization & dashboards
+  Looker Studio                    ← Visualization & dashboards
 ```
 
 ---
@@ -39,7 +39,7 @@ NYC Open Data (Socrata API)
 | **Google BigQuery** | Cloud data warehouse → hosts raw, staging, and mart datasets |
 | **dbt (data build tool)** | SQL-based transformation framework; manages staging → mart models with lineage tracking |
 | **GitHub** | Version control for all dbt models, macros, and project config |
-| **Data Studio (Looker Studio)** | BI dashboarding and visualization layer |
+| **Looker Studio** | BI dashboarding and visualization layer |
 
 ---
 
@@ -50,7 +50,9 @@ NYC Open Data (Socrata API)
 Both data sources were extracted from the NYC Open Data Socrata API using
 Google Cloud Functions written in Python. Each function authenticated with the API,
 paginated through results filtered to the 2020-2025 date range, and loaded the
-raw JSON responses directly into BigQuery.
+raw JSON responses directly into BigQuery. The extracts also contained some records
+from 2026 (38,861 street-related 311 complaints and some traffic counts), so the
+analysis queries filter to 2020 through 2025 explicitly.
 
 #### 311 Service Requests
 
@@ -90,7 +92,6 @@ The dbt DAG lineage graph below shows the full dependency chain from raw sources
 through staging to the final mart tables.
 
 ![dbt lineage DAG showing the transformation pipeline from raw sources through staging to mart tables.](../images/dbt-dag.png){fig-alt="dbt DAG lineage graph"}
-![dbt lineage DAG...](../images/dbt-dag.png){fig-alt="dbt DAG lineage graph"}
 
 ### Staging Layer
 
@@ -155,4 +156,13 @@ To reproduce the full pipeline from scratch:
 3. Run the Cloud Function (or equivalent) to load raw data
 4. From the repo root: `dbt deps && dbt run && dbt test`
 5. Run the Milestone 5 SQL queries (`queries/milestone5_queries.sql`) in BigQuery
-   to create the analytics mart tables used by Looker Studio
+   to create the analytics mart tables used by Looker Studio. The tables are built
+   with `CREATE OR REPLACE TABLE`, so rerunning refreshes them. Run order matters
+   because Query 8 reads tables built by Queries 2 and 7: the Query 1, 2 and 3 tables, then Query 6, 4, 7, 5, 8, 9.
+
+### Data quality note
+
+`dim_incident_location` contains repeated values of `incident_location_key`. The
+analysis queries handle this by collapsing the dimension to one row per key before
+joining (see Query 6). Adding a dbt `unique` test on that key is the recommended fix
+at the pipeline level.
